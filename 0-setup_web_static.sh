@@ -44,7 +44,14 @@ then
 fi
 
 # Create a fake HTML file /data/web_static/releases/test/index.html to test nginx.
-sudo echo "<h1> Nginx it is working!!</h1>" > /data/web_static/releases/test/index.html
+sudo echo "<html>" >> /data/web_static/releases/test/index.html
+sudo echo "    <head>" >> /data/web_static/releases/test/index.html
+sudo echo "    </html>" >> /data/web_static/releases/test/index.html
+sudo echo "    <body>" >> /data/web_static/releases/test/index.html
+sudo echo "        Holberton School" >> /data/web_static/releases/test/index.html
+sudo echo "    </body>" >> /data/web_static/releases/test/index.html
+sudo echo "</html> >>" /data/web_static/releases/test/index.html
+
 
 # Create a symbolic link /data/web_static/current linked to the /data/web_static/releases/test/ folder.
 if [ -L /data/web_static/current ]
