@@ -25,7 +25,11 @@ def do_pack():
         print(command)
         local("sudo mkdir -p ./versions")
         file = local(command)
-        return file
+        path_file = "./versions/" + name_file + ".tgz"
+        if os.path.isfile(path_file):
+            return (path_file)
+        else:
+            return(None)
     except:
         return(None)
 
