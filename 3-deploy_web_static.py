@@ -22,7 +22,7 @@ def do_pack():
         command = "sudo tar -cvzf ./versions/" + name_file + ".tgz ./web_static"
         local("sudo mkdir -p ./versions")
         file = local(command)
-        file_path = "/versions/" + name_file + ".tgz"
+        file_path = "./versions/" + name_file + ".tgz"
         if os.path.isfile(file_path):
             return file_path
         else:
@@ -36,7 +36,7 @@ def do_deploy(archive_path):
     if os.path.isfile(archive_path):
                   
         put(archive_path, '/tmp/')
-        
+
         destini_path = "/data/web_static/releases/" + archive_path.strip(".tgz") + "/"
         run("mkdir -p {}".format(destini_path))
         run("tar -xvzf /tmp/{} -C {}".format(archive_path.split("/")[-1], destini_path))
@@ -47,16 +47,15 @@ def do_deploy(archive_path):
         run("rm -rf /data/web_static/current")
         run("ln -s {} /data/web_static/current".format(destini_path))
         return(True)
-        
     else:
         return(False)
-
 
 def deploy():
     """ deploit """
 
     comprime = do_pack()
-    deploit = do_pack(comprime)
+
+    deploit = do_deploy(comprime)
     return(deploit)
 
 

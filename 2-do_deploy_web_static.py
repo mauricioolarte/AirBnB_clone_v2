@@ -26,7 +26,6 @@ def do_pack():
         file = local(command)
         return file
     except:
-        print("error")
         return(None)
 
 
@@ -45,8 +44,8 @@ def do_deploy(archive_path):
         run("rm -rf {}web_static".format(destini_path))
         run("rm -rf /data/web_static/current")
         run("ln -s {} /data/web_static/current".format(destini_path))
+        print("New version deployed!")
         return(True)
         
     else:
-        print("error")
         return(False)
