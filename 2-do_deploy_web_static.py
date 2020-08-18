@@ -19,7 +19,8 @@ def do_pack():
         minute = str(now.minute)
         second = str(now.second)
         name_file = "web_static_" + year + month + day + hour + minute + second
-        command = "sudo tar -cvzf ./versions/" + name_file + ".tgz ./web_static"
+        command = ("sudo tar -cvzf ./versions/" + name_file +
+                   ".tgz ./web_static")
         print(name_file)
         print(command)
         local("sudo mkdir -p ./versions")
@@ -32,20 +33,18 @@ def do_pack():
 def do_deploy(archive_path):
     """ deploy files in server """
     if os.path.isfile(archive_path):
-                  
         put(archive_path, '/tmp/')
-        
-        destini_path = "/data/web_static/releases/" + archive_path.strip(".tgz") + "/"
+        destini_path = ("/data/web_static/releases/" + archive_path.strip(
+                        ".tgz") + "/")
         run("mkdir -p {}".format(destini_path))
-        run("tar -xvzf /tmp/{} -C {}".format(archive_path.split("/")[-1], destini_path))
+        run("tar -xvzf /tmp/{} -C {}".format(
+                    archive_path.split("/")[-1], destini_path))
         run("rm /tmp/{}".format(archive_path.split("/")[-1]))
         run("mv -f {}web_static/* {}".format(destini_path, destini_path))
-
         run("rm -rf {}web_static".format(destini_path))
         run("rm -rf /data/web_static/current")
         run("ln -s {} /data/web_static/current".format(destini_path))
         print("New version deployed!")
         return(True)
-        
     else:
         return(False)
