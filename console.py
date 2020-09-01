@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """ Console Module """
+from os import getenv
 import cmd
 import sys
 from models.base_model import BaseModel
@@ -123,50 +124,28 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, args):
+    def do_create(self, line):
         """ Create an object of any class"""
         # create whit given parameters if args > 1 otherwhise create normally .
-        n_args = args.split()
-        if len(n_args) <= 1:
-            if not args:
-                print("** class name missing **")
-                return
-            elif args not in HBNBCommand.classes:
-                print("** class doesn't exist **")
-                return
-            new_instance = HBNBCommand.classes[args]()
-            storage.save()
-            print(new_instance.id)
-            storage.save()
+        total = line.split(" ")
+        if len(total) < 1:
+            print("** class name missing **")
+            return
+
+        if total[0] in HBNBCommand.classes:
+            my_list = line.split(" ")
+
+            obj = eval(my_list[0])()
+
+            for key_values in my_list[1:]:
+                k, v = key_values.split("=")
+                v = v.replace('_', " ")
+                setattr(obj, k, eval(v))
+            obj.save()
+            print("{}".format(obj.id))
         else:
-            if n_args[0] in HBNBCommand.classes:
-                # create new_istance and set atributes
-                new_instance = HBNBCommand.classes[n_args[0]]()
-                for i in range(1, len(n_args)):
-                    if '=' in n_args[i]:
-                        param = n_args[i].split('=')
-                        if (param[1][0] == '"' and param[0] in
-                           HBNBCommand.list_instances[n_args[0]]):
-                                # elimina comillas.
-                                if param[1].endswith('"'):
-                                    param[1] = param[1][1:-1]
-                                else:
-                                    param[1] = param[1][1:]
-                                param[1] = param[1].replace('"', '\"')
-                                param[1] = param[1].replace('_', ' ')
-                        elif (param[1][0] != '"' and '.' in param[1] and
-                              param[0] in HBNBCommand.list_instances[
-                             n_args[0]]):
-                            param[1] = float(param[1])
-                        elif (param[1].isdigit() and
-                              param[0] in HBNBCommand.list_instances[
-                             n_args[0]]):
-                            param[1] = int(param[1])
-                        # set atribuestes given in comand line.
-                        setattr(new_instance, param[0], param[1])
-            storage.save()
-            print(new_instance.id)
-            storage.save()
+            print("** class doesn't exist **")
+       
 
     def help_create(self):
         """ Help information for the create method """
@@ -196,10 +175,14 @@ class HBNBCommand(cmd.Cmd):
             return
 
         key = c_name + "." + c_id
-        try:
-            print(storage._FileStorage__objects[key])
-        except KeyError:
-            print("** no instance found **")
+        if getenv("HBNB_TYPE_STORAGE") == "FileStorage":
+            try:
+                print(storage._FileStorage__objects[key])
+            except KeyError:
+                print("** no instance found **")
+        else:
+            # aqui va codigo DBSstorage.
+            pass
 
     def help_show(self):
         """ Help information for the show command """
@@ -241,21 +224,28 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
-        print_list = []
 
-        if args:
-            args = args.split(' ')[0]  # remove possible trailing args
-            if args not in HBNBCommand.classes:
-                print("** class doesn't exist **")
-                return
-            for k, v in storage._FileStorage__objects.items():
-                if k.split('.')[0] == args:
+        if getenv("HBNB_TYPE_STORAGE") == "FileStorage":
+            print_list = []
+            if args:
+                args = args.split(' ')[0]  # remove possible trailing args
+                if args not in HBNBCommand.classes:
+                    print("** class doesn't exist **")
+                    return
+                for k, v in storage._FileStorage__objects.items():
+                    if k.split('.')[0] == args:
+                        print_list.append(str(v))
+            else:
+                for k, v in storage._FileStorage__objects.items():
                     print_list.append(str(v))
+            print(print_list)
         else:
-            for k, v in storage._FileStorage__objects.items():
-                print_list.append(str(v))
-
-        print(print_list)
+            args = args.split(' ')
+            if len(args) == 1 and args[0] in HBNBCommand.classes:
+                storage.all(HBNBCommand.classes[args[0]])
+            else:
+                storage.all()
+            
 
     def help_all(self):
         """ Help information for the all command """
@@ -264,11 +254,14 @@ class HBNBCommand(cmd.Cmd):
 
     def do_count(self, args):
         """Count current number of class instances"""
-        count = 0
-        for k, v in storage._FileStorage__objects.items():
-            if args == k.split('.')[0]:
-                count += 1
-        print(count)
+        if getenv("HBNB_TYPE_STORAGE") == "FileStorage":
+            count = 0
+            for k, v in storage._FileStorage__objects.items():
+                if args == k.split('.')[0]:
+                    count += 1
+            print(count)
+        else:
+            print(storage.all())
 
     def help_count(self):
         """ """
