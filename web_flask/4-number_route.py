@@ -6,30 +6,34 @@ from flask import Flask
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
+
 @app.route('/')
 def Hello_HBNB():
-   return 'Hello HBNB!'
+    return 'Hello HBNB!'
+
 
 @app.route('/hbnb')
 def HBNB():
-   return 'HBNB'
+    return 'HBNB'
 
 
 @app.route('/c/<text>')
 def show_c(text):
-   print(type(text))
-   return ('C ' + text.replace('_', ' '))
+    print(type(text))
+    return ('C ' + text.replace('_', ' '))
+
 
 @app.route('/python/<text>')
 @app.route('/python/')
 def show_python(text='is cool'):
-   return ('Python ' + text.replace('_', ' '))
+    return ('Python ' + text.replace('_', ' '))
+
 
 @app.route('/number/<int:n>')
 def show_number(n):
-   if type(n) is int:
-      return (str(n) + ' is a number')
+    if type(n) is int:
+        return (str(n) + ' is a number')
 
 
 if __name__ == '__main__':
-   app.run(debug=True)
+    app.run(debug=True)
