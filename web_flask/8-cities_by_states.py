@@ -26,8 +26,6 @@ def list_states():
             if city.__dict__['state_id'] == state.__dict__['id']:
                 cities.append((city.__dict__['id'], city.__dict__['name']))
         state_cities[state.__dict__['name']] = cities
-    for key, value in state_cities.items():
-        print("{}--{}".format(key, value))
     return (render_template('8-cities_by_states.html',
             query=query, query_cities=state_cities))
 
