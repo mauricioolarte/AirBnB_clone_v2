@@ -5,7 +5,7 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
-if getenv("HBNB_TYPE_STORAGE") != "FileStorage":
+if getenv("HBNB_TYPE_STORAGE") == "db":
     class State(BaseModel, Base):
         """ State class """
         __tablename__ = 'states'
