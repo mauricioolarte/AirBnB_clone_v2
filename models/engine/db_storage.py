@@ -18,7 +18,7 @@ from models.amenity import Amenity
 from models.review import Review
 
 
-class:
+class DBStorage:
     __engine = None
     __session = None
 
@@ -34,26 +34,28 @@ class:
                 'mysql+mysqldb://{}:{}@{}:3306/{}'.format(
                     HBNB_MYSQL_USER, HBNB_MYSQL_PWD, HBNB_MYSQL_HOST,
                     HBNB_MYSQL_DB), pool_pre_ping=True)
-        if HBNB_ENV == 'test':
-            Base.metadata.drop_all()
+        # if HBNB_ENV == 'test':
+        #     Base.metadata.drop_all()
 
     def all(self, cls=None):
         """ call all """
         if cls is not None:
-            query = self.__session.query(cls)
+            repuesta = []
+            query = self.__session.query(cls).all()
             for row in query:
-                    print('[{}]'.format(row))
-            return (query)
+                repuesta.append(row)
+                # print('[{}]'.format(row))
+            return (repuesta)
         else:
             classes = [State, City, Review, Amenity, Place, User]
             repuesta = []
             for clas in classes:
-                query = self.__session.query(clas)
+                query = self.__session.query(clas).all()
                 for row in query:
-                    print('[{}]'.format(row))
+                    # print('[{}]'.format(row))
+                    repuesta.append(row)
             return (repuesta)
         
-    
     
     def new(self, obj):
         """ add values in table"""
@@ -74,3 +76,7 @@ class:
         session_factory = sessionmaker(
             bind=self.__engine, expire_on_commit=False)
         self.__session = scoped_session(session_factory)
+    
+    def close(self):
+        self.__session.remove()
+    
