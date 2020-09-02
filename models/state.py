@@ -24,7 +24,7 @@ else:
             lista = []
             all_states = storage.all(City)
             for val in all_states.values():
-                if 'state_id' in val.__dict__.keys() and val.__dict__['state_id'] == self.id:
+                if ('state_id' in val.__dict__.keys() and
+                   val.__dict__['state_id'] == self.id):
                     lista.append(val)
             return(lista)
-

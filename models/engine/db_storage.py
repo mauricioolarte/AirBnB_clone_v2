@@ -55,13 +55,11 @@ class DBStorage:
                     # print('[{}]'.format(row))
                     repuesta.append(row)
             return (repuesta)
-        
-    
+
     def new(self, obj):
         """ add values in table"""
         self.__session.add(obj)
 
-        
     def save(self):
         """ save changes in talbes"""
         self.__session.commit()
@@ -76,8 +74,7 @@ class DBStorage:
         session_factory = sessionmaker(
             bind=self.__engine, expire_on_commit=False)
         self.__session = scoped_session(session_factory)
-    
+
     def close(self):
         """ reload session """
         self.__session.remove()
-    
