@@ -7,15 +7,15 @@
         <H1>States</H1>
         <UL>
             {% for row in query %}
-                <LI>{{ row.__dict__['id']}} <B>{{ row.__dict__['name'] }}</B></LI>
+                <LI>{{ row.__dict__['id']}} <B>{{ row.__dict__['name'] }}</B>
                 {% if query_cities[row.__dict__['name']] != [] %}
                     <UL>
                         {% for city in query_cities[row.__dict__['name']] %}
                             <LI>{{ city[0] }}: <B>{{ city[1] }}</B></LI>
                         {% endfor %}
                     </UL>
-                {% endif %}
-            {% endfor %}
+                </LI>
+            {% endif %} {% endfor %}
         </UL>
     </BODY>
 </HTML>
