@@ -8,15 +8,15 @@ from flask import Flask, render_template
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
-# @app.teardown_appcontext
-# def close_db_sesion():
-#     storage.close(app)
+
+@app.teardown_appcontext
+def close_db_sesion(error):
+    storage.close()
+
 
 @app.route('/states_list')
 def list_states():
     query = storage.all(State)
-    for row in query:
-        print(row.__dict__['name'])
     return (render_template('7-states_list.html', query=query))
 
 
