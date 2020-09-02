@@ -18,6 +18,7 @@ else:
 
         @property
         def cities(self):
+            """ geter cities """
             from models.__init__ import storage
             from models.city import City
             lista = []
