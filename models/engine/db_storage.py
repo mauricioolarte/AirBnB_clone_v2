@@ -41,7 +41,7 @@ class DBStorage:
         """ call all """
         if cls is not None:
             repuesta = []
-            query = self.__session.query(cls).all()
+            query = self.__session.query(cls).order_by(cls.name.asc()).all()
             for row in query:
                 repuesta.append(row)
                 # print('[{}]'.format(row))
