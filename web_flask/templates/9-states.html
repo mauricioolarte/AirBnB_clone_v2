@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<HTML lang="en">
+    <HEAD>
+        <TITLE>HBNB</TITLE>
+    </HEAD>
+    <BODY>
+        {% for row in query %}
+        <H1>State: {{ row.__dict__['name'] }}</H1>
+        <H3>Cities:</H3>
+        <UL> {% for city in query_cities[row.__dict__['name']] %}
+                <LI>{{ city[0] }}: <B>{{ city[1] }}</B></LI> 
+        {% endfor %}</UL>
+        {% endfor %}
+    </BODY>
+</HTML>
