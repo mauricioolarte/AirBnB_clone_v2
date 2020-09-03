@@ -20,7 +20,6 @@ def close_db_sesion(error):
 def list_states(id=""):
     state_cities = {}
     query = storage.all(State)
-    print("este es {}".format(id))
     if id:
         q_state = []
         for state in query:
